@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriTees - Conversion Leaks Review | The Prompted</title>
+    <meta name="description" content="Conversion leaks review and recommendations for AgriTees farm and homestead apparel.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Questrial&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-primary: 'Montserrat', 'Questrial', Arial, sans-serif;
+            --color-text-primary: #2e2e2e;
+            --color-text-headline: #1c3320;
+            --color-text-secondary: #2f4f34;
+            --color-text-muted: #666666;
+            --color-accent: #3a5a40;
+            --color-accent-light: #a3b18a;
+            --color-accent-dark: #23401f;
+            --color-success: #2E8B57;
+            --color-success-light: #d4edda;
+            --color-urgency: #c0392b;
+            --color-urgency-light: #f8d7da;
+            --color-bg-white: #FFFFFF;
+            --color-bg-light: #f6f7f4;
+            --color-bg-cream: #faf9f5;
+            --color-midnight: #1c3320;
+            --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --radius-sm: 0.5rem;
+            --radius-md: 1rem;
+            --radius-lg: 1.5rem;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-primary);
+            font-size: 1.125rem;
+            line-height: 1.7;
+            color: var(--color-text-primary);
+            background: var(--color-bg-white);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--color-midnight) 0%, #2f4f34 100%);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header-brand {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-title {
+            color: white;
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-subtitle {
+            color: rgba(255,255,255,0.8);
+            font-size: 1rem;
+        }
+
+        .header-date {
+            color: var(--color-accent-light);
+            font-size: 0.875rem;
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(180deg, var(--color-bg-cream) 0%, var(--color-bg-white) 100%);
+            padding: 3rem 2rem;
+        }
+
+        .hero p { margin-bottom: 1.25rem; max-width: 800px; }
+        .hero strong { color: var(--color-text-secondary); }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--color-text-headline);
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-text-secondary);
+            margin: 1.5rem 0 1rem;
+        }
+
+        h4 {
+            font-size: 1.0625rem;
+            font-weight: 700;
+            color: var(--color-text-secondary);
+            margin: 1.25rem 0 0.5rem;
+        }
+
+        p { margin-bottom: 1rem; }
+
+        /* Section divider */
+        .divider {
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-accent) 0%, var(--color-accent-light) 50%, var(--color-accent) 100%);
+            margin: 3rem 0;
+            border-radius: 2px;
+        }
+
+        /* Recommendation Section */
+        .recommendation { padding: 2.5rem 2rem; }
+        .recommendation:nth-child(even) { background: var(--color-bg-light); }
+
+        .recommendation-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .recommendation-number {
+            width: 3.5rem;
+            height: 3.5rem;
+            min-width: 3.5rem;
+            background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(58, 90, 64, 0.3);
+        }
+
+        .recommendation-title { flex: 1; }
+        .recommendation-title h2 { margin-bottom: 0; }
+
+        .urgent-badge {
+            display: inline-block;
+            background: var(--color-urgency);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+
+        /* Real screenshots */
+        figure {
+            margin: 1.5rem 0;
+        }
+
+        figure img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border: 1px solid #e2e2dd;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-card);
+        }
+
+        figure.phone img {
+            max-width: 320px;
+            margin: 0 auto;
+            border-radius: var(--radius-md);
+        }
+
+        figcaption {
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+            font-style: italic;
+            text-align: center;
+            margin-top: 0.75rem;
+            line-height: 1.5;
+        }
+
+        .figure-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .figure-pair figure { margin: 0; }
+
+        /* Boxes */
+
+        a {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            font-weight: 600;
+        }
+
+        a:hover { color: var(--color-accent-dark); }
+
+        .table-wrap { overflow-x: auto; margin: 1.5rem 0; }
+
+        table { border-collapse: collapse; width: 100%; font-size: 0.9375rem; }
+
+        th, td { text-align: left; padding: 0.55rem 0.9rem; border-bottom: 1px solid #e2e2dd; }
+
+        th { background: var(--color-accent); color: white; font-weight: 700; }
+
+        td:nth-child(n+2), th:nth-child(n+2) { text-align: right; }
+
+        tr.cutline td {
+            background: var(--color-bg-cream);
+            font-style: italic;
+            color: var(--color-text-muted);
+            text-align: left;
+            font-size: 0.875rem;
+        }
+
+        .implementation-box {
+            background: var(--color-bg-cream);
+            border: 1px solid var(--color-accent-light);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .implementation-box h4 {
+            color: var(--color-accent-dark);
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .implementation-box p { margin-bottom: 0.75rem; font-size: 0.9375rem; }
+        .implementation-box p:last-child { margin-bottom: 0; }
+
+        .implementation-box ol,
+        .implementation-box ul {
+            margin: 0 0 0.75rem 0;
+            padding-left: 1.5rem;
+            font-size: 0.9375rem;
+        }
+
+        .implementation-box ol:last-child,
+        .implementation-box ul:last-child { margin-bottom: 0; }
+
+        .implementation-box li { margin-bottom: 0.875rem; line-height: 1.55; }
+        .implementation-box li:last-child { margin-bottom: 0; }
+
+        .resource-note {
+            display: block;
+            margin-top: 0.25rem;
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+        }
+
+        .callout {
+            background: #fff8e1;
+            border-left: 4px solid #f0b429;
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        }
+
+        .callout p:last-child { margin-bottom: 0; }
+
+        ul { list-style: none; margin: 1rem 0; padding: 0; }
+
+        ul li {
+            padding-left: 1.75rem;
+            position: relative;
+            margin-bottom: 0.625rem;
+        }
+
+        ul li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--color-accent);
+            font-weight: 700;
+        }
+
+        ol { margin: 1rem 0 1rem 1.5rem; }
+        ol li { margin-bottom: 0.625rem; }
+
+        /* Working-well section */
+        .working-well {
+            background: var(--color-success-light);
+            padding: 2.5rem 2rem;
+        }
+
+        .working-well h2 { color: #1e5c3a; }
+
+        .working-well ul li::before { content: "✓"; color: var(--color-success); }
+
+        /* Priority section */
+        .priority { background: var(--color-midnight); color: white; padding: 3rem 2rem; }
+        .priority h2 { color: white; }
+        .priority h3 { color: var(--color-accent-light); }
+        .priority p { color: rgba(255,255,255,0.85); }
+        .priority ul li { color: rgba(255,255,255,0.85); }
+        .priority ul li::before { color: var(--color-accent-light); }
+
+        .priority ol.ranked {
+            list-style: none;
+            counter-reset: rank;
+            margin: 2rem 0 0;
+            padding: 0;
+        }
+
+        .priority ol.ranked li {
+            counter-increment: rank;
+            position: relative;
+            padding: 0 0 1.25rem 3.25rem;
+            margin-bottom: 1.25rem;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+            color: rgba(255,255,255,0.85);
+        }
+
+        .priority ol.ranked li:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .priority ol.ranked li::before {
+            content: counter(rank);
+            position: absolute;
+            left: 0;
+            top: -0.15rem;
+            width: 2.25rem;
+            height: 2.25rem;
+            border: 1px solid var(--color-accent-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.95rem;
+            color: var(--color-accent-light);
+        }
+
+        .priority ol.ranked strong { color: white; }
+
+
+        /* Table */
+        .table-wrap { overflow-x: auto; margin: 1.5rem 0; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9375rem;
+            min-width: 520px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e2e2dd;
+        }
+
+        th {
+            background: var(--color-bg-light);
+            font-weight: 700;
+            color: var(--color-text-secondary);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--color-bg-light);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            color: var(--color-text-muted);
+            font-size: 0.9375rem;
+        }
+
+        .footer strong { color: var(--color-text-secondary); }
+
+        @media (max-width: 768px) {
+            body { font-size: 1rem; }
+            .container { padding: 0 1.25rem; }
+            .header-title { font-size: 1.5rem; }
+            h2 { font-size: 1.375rem; }
+            .recommendation { padding: 2rem 1rem; }
+            .recommendation-header { gap: 0.875rem; }
+            .recommendation-number {
+                width: 2.75rem; height: 2.75rem; min-width: 2.75rem; font-size: 1rem;
+            }
+            .figure-pair { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-brand">The Prompted</div>
+    <div class="header-title">Conversion Leaks Review</div>
+    <div class="header-subtitle">For AgriTees to Maximize Store Conversion Rate, Profit Per Visitor, and Contribution Margin</div>
+    <div class="header-date">Prepared by The Prompted &middot; August 2026</div>
+</div>
+
+<div class="hero">
+    <div class="container">
+        <p>We've reviewed the website &amp; data for AgriTees and found the following opportunities that can improve conversion rate, AOV, and contribution margin per session for implementation consideration.</p>
+
+        <p>All recommendations are meant as experimentation considerations, not one-and-done implementations.</p>
+
+        <p>All changes should be measured and reviewed with an iterative approach. Each opportunity is a lever that can be optimized continuously over time.</p>
+
+        <figure>
+            <img src="ex-compounding.png" alt="Two funnels side by side on the same 100 visitors. The first drops 20% at the landing page, converts 5% to cart and ends at $50 of revenue. The second improves each step slightly and ends at $150.">
+            <figcaption>Same traffic, same store, small gains at each step. $50 becomes $150.</figcaption>
+        </figure>
+    </div>
+</div>
+
+<!-- Recommendation 1 -->
+<div class="recommendation">
+    <div class="container">
+        <div class="recommendation-header">
+            <div class="recommendation-number">1</div>
+            <div class="recommendation-title">
+                <h2>Your designs carry more conversion power than anything else on this list</h2>
+            </div>
+        </div>
+
+        <p>I repeatedly see less optimized stores, but with well crafted designs, sell 20x more than optimized stores with less effective designs (20 orders a day, roughly $30k a month, versus 500 orders a day, roughly $1M a month).</p>
+
+        <p>Designs carry a disproportionate amount of impact in POD.</p>
+
+        <p>On one hand that's a blessing, because it means if you master this one thing, you can print profits on demand.</p>
+
+        <p>On the other hand it's a curse, because getting to that level of mastery is seemingly easy on the surface, but much harder below. Kind of like shooting three pointers in basketball. NBA players make it look easy, but once you actually step on the court and try to do it yourself, you realize it's not as trivial as it looks.</p>
+
+        <p>So it's worth being deliberate about what goes into a design rather than trusting the idea that shows up. I'd say the strongest POD designs stack three things. A cultural moment people are already thinking about, so July 4th, Thanksgiving, Christmas. The niche itself, which for you is farm and homestead life. And optionally a second niche sitting next to it that the same person also belongs to.</p>
+
+        <p>Stacking that third one is where it gets interesting, because you stop competing with every other chicken shirt. Abe Lincoln playing guitar to celebrate July 4th is the kind of thing I mean. It's the holiday, it's a recognizable figure, and it's a music reference, so it catches three different reasons to stop scrolling instead of one.</p>
+
+        <div class="implementation-box">
+            <h4>How to implement</h4>
+            <p>Pick the next cultural moment on the calendar and build a 100-design run against it, using your best-performing niche angle with one adjacent interest layered on top.</p>
+            <p>Keep the adjacent niche genuinely adjacent. The test is whether the same person would claim both identities without thinking about it.</p>
+
+            <h4 style="margin-top:1.5rem;">Watch these</h4>
+            <p>This is the part of the business I've spent the most time on, so rather than compress it here, these walk through the whole thinking:</p>
+            <ul>
+                <li><a href="https://youtu.be/b1f-5-b2x20">Claude Analyzed 200,000 T-Shirt Sales and Found What Makes Winning Designs</a></li>
+                <li><a href="https://youtu.be/yy6Yv_iK9eE">This Boring T-Shirt Made $209,410.40, Here's Why</a></li>
+                <li><a href="https://youtu.be/RLHeKrcSx_Y">Claude Turns Your Losing Designs Into Best-Selling Winners</a></li>
+                <li><a href="https://youtu.be/1Xi00__2CIc">Claude Made 40 POD Designs That Sold $5,000 In 7 Days</a></li>
+                <li><a href="https://youtu.be/gPz4Dtepspc">Ugly AI T-Shirt Made $6,052 In 15 Days (Designs Don't Matter)</a></li>
+            </ul>
+
+            <h4 style="margin-top:1.5rem;">Then run the skills, in this order</h4>
+            <p>Those videos use four skills that run in sequence, and together they're the process behind the design run above. These are the full versions, and each link goes straight to the download and the setup steps:</p>
+            <ol>
+                <li><a href="https://theprompted.github.io/prompted-resources/r/a610dc7df8/parade-hunt-public/">Parade Hunt</a> finds the crowd that keeps refilling itself.</li>
+                <li><a href="https://theprompted.github.io/prompted-resources/r/3cfe14aae9/identity-decoder/">Identity Decoder</a> gets inside one pocket of that crowd, how they talk and what they'd never say out loud.</li>
+                <li><a href="https://theprompted.github.io/prompted-resources/r/66be201e75/make-the-flag/">Make The Flag</a> turns that into the shirt concepts and the generation prompts.</li>
+                <li><a href="https://theprompted.github.io/prompted-resources/r/90e6359b02/tattoos-not-fashion/">Tattoos, Not Fashion</a> is the one behind the $6,052 video.</li>
+            </ol>
+        </div>
+</div>
+</div>
+
+
+
+<!-- Recommendation 2 -->
+<div class="recommendation">
+    <div class="container">
+        <div class="recommendation-header">
+            <div class="recommendation-number">2</div>
+            <div class="recommendation-title">
+                <h2>Cut your colours down to the five that actually sell</h2>
+            </div>
+        </div>
+
+        <p>We typically curate colour options for POD apparel down to a handful, because every extra swatch is another decision you're asking someone to make before they buy, and decision fatigue costs you conversions.</p>
+
+        <p>Your product pages show eight, and about two thirds of your catalog carries more than six.</p>
+
+        <figure>
+            <img src="09-colors-eight.png" alt="AgriTees product page colour selector showing eight colour swatches above the size buttons">
+            <figcaption>Eight swatches on a single listing. Every one is a decision you're asking someone to make before they buy.</figcaption>
+        </figure>
+
+        <p>My agent pulled your last twelve months of sales by variant, so this isn't a guess. You sold 1,469 shirts across 18 colours, and five of them account for <strong>82.3% of everything you sold.</strong></p>
+
+        <div class="table-wrap">
+            <table>
+                <tr><th>Colour</th><th>On listings</th><th>Units sold</th><th>Share</th></tr>
+                <tr><td>Military Green</td><td>368</td><td>308</td><td>21.0%</td></tr>
+                <tr><td>Dark Heather</td><td>385</td><td>301</td><td>20.5%</td></tr>
+                <tr><td>Black</td><td>430</td><td>259</td><td>17.6%</td></tr>
+                <tr><td>Heather Indigo</td><td>276</td><td>184</td><td>12.5%</td></tr>
+                <tr><td>Navy</td><td>430</td><td>157</td><td>10.7%</td></tr>
+                <tr class="cutline"><td colspan="4">Everything below: 17.7% of sales combined</td></tr>
+                <tr><td>Royal</td><td>367</td><td>101</td><td>6.9%</td></tr>
+                <tr><td>Sand</td><td>340</td><td>78</td><td>5.3%</td></tr>
+                <tr><td>Daisy</td><td>65</td><td>29</td><td>2.0%</td></tr>
+                <tr><td>Light Blue</td><td>13</td><td>10</td><td>0.7%</td></tr>
+                <tr><td>White</td><td>30</td><td>10</td><td>0.7%</td></tr>
+                <tr><td>Purple</td><td>40</td><td>6</td><td>0.4%</td></tr>
+                <tr><td>Asphalt</td><td>39</td><td>2</td><td>0.1%</td></tr>
+                <tr><td>Red</td><td>32</td><td>2</td><td>0.1%</td></tr>
+                <tr><td>Dark Chocolate</td><td>21</td><td>1</td><td>0.1%</td></tr>
+                <tr><td>Orange, Coral Silk, Natural, Sport Grey</td><td>1-4 each</td><td>1 each</td><td>~0%</td></tr>
+                <tr><td>Azalea, Jade Dome, Antique Cherry Red, Gray</td><td>1-2 each</td><td>0</td><td>0%</td></tr>
+            </table>
+        </div>
+
+        <p>Asphalt, Red, Purple and Dark Chocolate are the telling ones. They sit on 21 to 40 listings each, so they've had real exposure to real traffic, and between them they've sold 11 shirts in a year. That isn't a colour waiting to be discovered. It's a colour people keep seeing and keep not buying.</p>
+
+        <p>Royal and Sand are the two you'll feel. They do sell, and dropping them costs you something on paper. The trade is that the person landing on the page stops weighing eight options and picks from five, and the five they're picking from are the ones people already want.</p>
+
+        <div class="implementation-box">
+            <h4>How to implement</h4>
+            <p><strong>Keep these five:</strong> Military Green, Dark Heather, Black, Heather Indigo, Navy. That's 82.3% of your sales on a third of the swatches.</p>
+            <p><strong>Cut everything else,</strong> starting with the fourteen that barely register: Asphalt, Red, Purple, Dark Chocolate, White, Light Blue, Orange, Coral Silk, Natural, Sport Grey, Azalea, Jade Dome, Antique Cherry Red, Gray. Four of them have never sold a single shirt. Royal, Sand and Daisy come off too.</p>
+            <p><strong>Order the swatches by what sells.</strong> Military Green first, then Dark Heather, then Black. Right now the highest converting option isn't necessarily the first one someone sees.</p>
+            <p>I'd review this once a season, since the best selling colour in July usually isn't the one that wins in November.</p>
+        </div>
+</div>
+</div>
+
+<!-- Recommendation 3 -->
+<div class="recommendation">
+    <div class="container">
+        <div class="recommendation-header">
+            <div class="recommendation-number">3</div>
+            <div class="recommendation-title">
+                <h2>Add a sticky add to cart button on mobile</h2>
+            </div>
+        </div>
+
+        <p>Your mobile product page runs about <strong>9,530 pixels</strong>. That's roughly eleven phone screens of scrolling.</p>
+
+        <p>There is exactly one add to cart button, and it lives near the top. Once a customer scrolls past it, there is no way to buy without scrolling back up.</p>
+
+        <div class="figure-pair">
+            <figure class="phone">
+                <img src="02-pdp-atc-top.png" alt="AgriTees mobile product page at the top, showing the add to cart button">
+                <figcaption>Top of the page. The button is there.</figcaption>
+            </figure>
+            <figure class="phone">
+                <img src="03-pdp-atc-gone-scrolled.png" alt="AgriTees mobile product page scrolled down, with no add to cart button visible anywhere">
+                <figcaption>Scrolled down the same page. No way to buy without scrolling back.</figcaption>
+            </figure>
+        </div>
+
+        <p>The irony is that everything below the button is doing its job. Your FAQ section, the brand story, the "Need Help? I'm Around" block. That content is <em>persuading</em> people. It's building the case for the purchase.</p>
+
+        <p>And at the exact moment it succeeds, there's no button.</p>
+        <figure>
+            <img src="ex-sticky-atc.png" alt="Example of a sticky add to cart bar pinned to the bottom of a mobile product page on simplemodern.com">
+            <figcaption>How it looks done well. The buy button rides with the customer no matter how far they scroll.</figcaption>
+        </figure>
+
+
+        <div class="implementation-box">
+            <h4>How to implement</h4>
+            <p>Add a sticky add to cart bar that appears once the main button scrolls out of view. It should show the product name, the price, the selected size, and the button.</p>
+            <p>Many themes include this as a toggle in the theme editor under product page settings. If yours doesn't, apps like Sticky Add to Cart Bar do it for a few dollars a month.</p>
+            <p>Prioritise mobile. That's where the page length hurts most and where most of your Meta traffic lands.</p>
+            <p><strong>Walkthrough:</strong> <a href="https://www.skool.com/the-prompted/classroom/7349116b?md=83e140c90e3e4ad884b50810703e138a">Sticky add to cart in the Classroom</a>, or the <a href="https://www.youtube.com/watch?v=fu4LAzvlPyg">video version here</a>.</p>
+        </div>
+</div>
+</div>
+
+<!-- Recommendation 4 -->
+<div class="recommendation">
+    <div class="container">
+        <div class="recommendation-header">
+            <div class="recommendation-number">4</div>
+            <div class="recommendation-title">
+                <h2>Give people a reason to buy more than one shirt</h2>
+            </div>
+        </div>
+
+        <p>Every product is $29.99 on its own. There's no "buy 2 save 10%," no bundle, no multi-pack, nothing that makes the second shirt feel like a better deal than the first.</p>
+
+        <p>You're already halfway there. Your collections are built around identities, "Chicken Math &amp; Milestones," "Feral &amp; Sassy," "Coop Life," which is exactly the structure that makes bundles obvious.</p>
+
+        <p>I'll give you the real numbers on this rather than the pitch, because I think the honest version is more useful. In a t-shirt store I've seen this run in, comparing the flat-pricing era against the tiered era, gross margin per order went from <strong>$26.22 to $33.68</strong>. That's up 28%, and units per order went from 1.88 to 2.12.</p>
+
+        <figure>
+            <img src="ex-tiered-cart.png" alt="Example of a tiered cart incentive showing unlocked and locked reward tiers as the basket grows">
+            <figcaption>A tiered incentive in the cart. Each threshold shows what's unlocked and what's still one item away.</figcaption>
+        </figure>
+
+
+        <div class="implementation-box">
+            <h4>How to implement</h4>
+            <p><strong>Keep the tiers shallow.</strong> Something like Buy 2 get 5% off, Buy 3 get 10% off, Buy 4 get 15% off works well without destroying margin. Deeper discounts buy a bigger jump that fades faster.</p>
+            <p><strong>Walkthrough:</strong> <a href="https://www.skool.com/the-prompted/classroom/7349116b?md=6de5933fd54945fe861d893a7519e168">Tiered cart incentives in the Classroom</a>.</p>
+        </div>
+</div>
+</div>
+
+<!-- Recommendation 5 -->
+<div class="recommendation">
+    <div class="container">
+        <div class="recommendation-header">
+            <div class="recommendation-number">5</div>
+            <div class="recommendation-title">
+                <h2>Put an anchor price next to your price</h2>
+            </div>
+        </div>
+
+        <p>Right now your prices sit flat. A shirt is $29.99 and that's the whole story, so the number has nothing to be measured against and the shopper has no way to tell whether it's a good deal.</p>
+
+        <p>An anchor fixes that in one field. You set a compare-at price, the store shows the original struck through next to what they actually pay, and the discount does the arguing for you. Most stores selling in your range do this, and at $29.99 the usual anchor lands around $40.</p>
+
+        <p>You've already done it in a handful of places. My agent found 48 variants carrying a compare-at price, some at $42.84 against a $29.99 shirt, which is a 30% saving shown on the page. The other 16,300 have nothing. So this isn't a new skill to learn, it's a setting you've used and then stopped using.</p>
+
+        <div class="implementation-box">
+            <h4>How to implement</h4>
+            <p><strong>Set compare-at price on the variants.</strong> In Shopify it's the field directly beside price. Bulk edit handles the whole catalog at once, so this is an afternoon rather than a project.</p>
+            <p><strong>Keep it believable.</strong> Around $40 against a $29.99 tee. Anchors that are too far above the real price read as fake and cost you the trust the anchor was meant to buy.</p>
+            <p><strong>Be consistent.</strong> A shopper who sees a struck-through price on one listing and none on the next reads the second as the more expensive shirt, even when it isn't.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Recommendation 6 -->
+<div class="recommendation">
+    <div class="container">
+        <div class="recommendation-header">
+            <div class="recommendation-number">6</div>
+            <div class="recommendation-title">
+                <h2>Use your review photos as ads</h2>
+            </div>
+        </div>
+
+        <p>I'm flagging up front that this one isn't a website change and it won't move your conversion rate. It's a traffic recommendation, and it's here because the asset is already sitting in your account.</p>
+
+        <p>Ads have a meaningful impact on conversion rate and AOV, and right now the creative diversity is lacking. Your top five ads account for roughly three quarters of your spend this year, so the account has very little to work with. One quick way to add diversity is to use what you already have, which is the photos attached to those 76 reviews.</p>
+
+        <p>They can run as-is without any edits. We see lo-fi, unedited photos perform well exactly as they are, and because you're running bid caps the risk to reward ratio is in your favour over a long enough window.</p>
+
+        <p>As someone who has built and sold a couple of POD brands, this works with the right creatives. It also gives the account something real to learn from, because Meta can read body shapes, skin tone and the general vibe of the content and serve it to the right people.</p>
+
+        <div class="implementation-box">
+            <h4>How to implement</h4>
+            <p>Pull the review photos you have rights to use and run them as-is against your current bid caps.</p>
+            <p>Turning on photo reviews in Loox feeds this pipeline permanently, so every future order becomes potential creative.</p>
+            <p><strong>Walkthrough:</strong> <a href="https://www.skool.com/the-prompted/classroom/87373c91?md=f4812ff2b0324081950f5989181aae09">the Ad Variety Workshop in the Classroom</a> is the place to start on creative diversity.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Recommendation 7 -->
+<div class="recommendation">
+    <div class="container">
+        <div class="recommendation-header">
+            <div class="recommendation-number">7</div>
+            <div class="recommendation-title">
+                <h2>Your cart tells them to add another tee, then doesn't show them one</h2>
+            </div>
+        </div>
+
+        <p>Your cart already has the free shipping progress bar, with a filled indicator and copy in your own voice: <em>"You're $40.01 away from free shipping. Chicken math says add another tee."</em></p>
+
+        <figure class="phone">
+            <img src="09-cart-live.png" alt="AgriTees cart drawer showing a free shipping progress bar and a single line item, with no product suggestions">
+            <figcaption>Your live cart with one shirt in it. The progress bar does its job, then the next thing on the page is the checkout button.</figcaption>
+        </figure>
+
+        <p>The gap is what happens after that sentence. You've just told someone to add another tee, and then you don't show them one. They'd have to close the cart, go find a second design, and come back.</p>
+
+        <p>The cart is the highest-intent page on your site. Everyone who reaches it has already decided they want a shirt, so it's the cheapest place you'll ever find to raise an order's value. Right now the ask is there and the means isn't.</p>
+        <figure>
+            <img src="ex-in-cart-upsell.png" alt="Example of in-cart upsells showing suggested products with one-click add to cart above the checkout button">
+            <figcaption>Suggested products sitting inside the cart, each one a single click to add.</figcaption>
+        </figure>
+
+
+        <div class="implementation-box">
+            <h4>How to implement</h4>
+            <p><strong>1. In-cart upsells.</strong> Show 3-4 products directly in the cart, above the checkout button. Not on a separate page, and not after checkout begins. Once someone clicks toward checkout their mindset shifts from browsing to completing.</p>
+            <p><strong>2. Put them right under the progress bar.</strong> The bar creates the intent and the suggestions should answer it in the same glance, rather than sitting below the fold of the drawer.</p>
+            <p><strong>3. Merchandise it with your own data.</strong> You know which designs sell together. Lead with your proven winners rather than a random feed.</p>
+            <p>Apps that do this well: Rebuy, Wiser, or a slide cart like Slide Cart Drawer. Budget 2-3 hours to set up, no code needed.</p>
+            <p><strong>Walkthrough:</strong> <a href="https://www.skool.com/the-prompted/classroom/7349116b?md=23e298a1e5064785973932d0a82ef42e">In-cart upsells in the Classroom</a>, or the <a href="https://www.youtube.com/watch?v=WEw5DrUlNW4">video version here</a>. For the upsells that sit directly under the add to cart button on the product page, <a href="https://www.skool.com/the-prompted/classroom/7349116b?md=80b0852a35ab4048af96d08f3a4ea638">see here</a>.</p>
+        </div>
+</div>
+</div>
+
+<!-- Recommendation 8 -->
+<div class="recommendation">
+    <div class="container">
+        <div class="recommendation-header">
+            <div class="recommendation-number">8</div>
+            <div class="recommendation-title">
+                <h2>Make the homepage hero sell the offer, not just the mood</h2>
+            </div>
+        </div>
+
+        <p>Your hero says "Made for People Who Chose Different" with the subline "Inside jokes for chicken keepers. Worn by those who get it."</p>
+
+        <figure>
+            <img src="07-homepage-hero.png" alt="AgriTees homepage hero section reading Made for People Who Chose Different">
+            <figcaption>Your current homepage hero. Strong brand voice, no offer and no product.</figcaption>
+        </figure>
+
+        <p>The voice is genuinely good and the positioning is clear. I wouldn't throw it away.</p>
+
+        <p>But the hero is the most-viewed real estate on your site, and right now it carries a mood rather than a reason to act today. Someone arriving cold gets identity, but no offer, no bestseller, and no proof.</p>
+        <figure>
+            <img src="ex-hero.png" alt="Example homepage hero leading with a specific offer, a trust line, and a shop now button">
+            <figcaption>A hero doing the work. Specific offer, proof line above it, one clear button.</figcaption>
+        </figure>
+
+
+        <div class="implementation-box">
+            <h4>What to test</h4>
+            <p>Keep your line as the smaller subhead and put the offer above it, stated plainly. Something like:</p>
+            <p><strong>"Fall Sale: Up to 15% Off"</strong><br>
+            <strong>"Buy 2, Save 5%. Buy 3, Save 10%. Buy 4, Save 15%."</strong><br>
+            <strong>"Free Shipping Over $70"</strong><br>
+            <strong>"3 Tees, Free Shipping"</strong></p>
+            <p>Then a button that says what happens next, so "Shop Chicken Tees" rather than "Shop Now", and your best-selling design behind it instead of a generic shot.</p>
+            <p>Rotate the offer with the season. Fall Sale becomes Black Friday becomes Christmas, and the hero is the one place a returning visitor will notice it changed.</p>
+        </div>
+</div>
+</div>
+
+
+
+
+
+
+
+<!-- Extra -->
+<div class="recommendation">
+    <div class="container">
+        <div class="recommendation-header">
+            <div class="recommendation-title">
+                <h2>Add a post-purchase upsell</h2>
+            </div>
+        </div>
+
+        <p>Right after someone buys, on the thank-you page, before they leave your site, is the single highest-converting offer moment you have. They've already trusted you and already entered payment details.</p>
+
+        <p>A one-click post-purchase offer requires no re-entry of payment info and no new acquisition cost. Every dollar it earns lands on top of an order you'd already won.</p>
+
+        <p>Because you pay nothing to acquire that second item, <strong>an accepted upsell can be worth more than the profit on the original order.</strong></p>
+
+        <figure>
+            <img src="ex-post-purchase.png" alt="Example post-purchase upsell offering a discounted add-on immediately after checkout with a one click add to order button">
+            <figcaption>A post-purchase offer. One click to add, no re-entering payment details.</figcaption>
+        </figure>
+
+        <div class="implementation-box">
+            <h4>How to implement</h4>
+            <p>Apps: Zipify OCU or AfterSell.</p>
+            <p><strong>Fill every slot you get.</strong> Use all the upsell and downsell slots the app gives you rather than stopping at one. Each empty slot is a free ask you didn't make, and someone who declines the first offer will often take the second.</p>
+            <p><strong>Sequence them off what actually sells together.</strong> If design 1 tends to sell alongside design 2, put design 1 up as upsell #1 at a discount, design 2 as upsell #2, and keep going down the pairing list. Your order history already tells you these pairs, so you're not guessing.</p>
+            <p>Someone who just bought a chicken shirt is the most likely person on earth to want another chicken shirt, so keep the offers inside the same lane rather than reaching across the catalog.</p>
+            <p><strong>Model the upside first:</strong> run your numbers through our <a href="https://chatgpt.com/g/g-6835f4d07d808191b5fa17f255472d93-post-purchase-profit-forecaster">post-purchase profit forecaster</a> to see what a 10% take rate is actually worth to you before you build it.</p>
+        </div>
+</div>
+</div>
+
+<!-- Extra -->
+<div class="recommendation">
+    <div class="container">
+        <div class="recommendation-header">
+            <div class="recommendation-title">
+                <h2>Install Microsoft Clarity so you stop guessing</h2>
+            </div>
+        </div>
+
+        <p>You have GA4, the Meta pixel, and Klaviyo installed. You do not have Microsoft Clarity. My agent checked the page source and the tracking object directly.</p>
+
+        <p>Clarity is a free heatmap and session recording tool. It records real sessions so you can watch what people actually do, rather than inferring it from aggregate numbers.</p>
+
+        <figure>
+            <img src="ex-clarity.png" alt="Microsoft Clarity dashboard showing a click heatmap over a page alongside a ranked list of most-clicked elements with session recordings">
+            <figcaption>What it looks like in use. Ranked clicks on the left, a heat overlay of where attention actually lands on the right.</figcaption>
+        </figure>
+
+        <p>If you're wondering why traffic lands and doesn't convert, this is the tool that answers that specific question. Instead of guessing, you'd watch twenty sessions and see it.</p>
+
+        <ul>
+            <li>Whether people scroll far enough to find the FAQ, or bounce before it</li>
+            <li>Whether they hunt for the add to cart button after scrolling past it</li>
+            <li>Whether they look for reviews and give up when they find none</li>
+            <li>Where the rage clicks and dead clicks are, which is usually where something looks tappable and isn't</li>
+        </ul>
+
+        <div class="implementation-box">
+            <h4>How to implement</h4>
+            <p>Go to clarity.microsoft.com and create a free account.</p>
+            <p>Add the tracking code to your theme, or install the Microsoft Clarity app from the Shopify App Store, which is the easier path.</p>
+            <p>Within about 24 hours you'll have session recordings and heatmaps. Watch twenty sessions that didn't convert before you change anything else.</p>
+            <p><strong>Set it up:</strong> <a href="https://clarity.microsoft.com/">clarity.microsoft.com</a>. Free account, then drop the tracking code into your theme or install the Shopify app, which is the easier path.</p>
+        </div>
+</div>
+</div>
+
+
+
+<!-- What's working -->
+<div class="working-well">
+    <div class="container">
+        <h2>What you've already got right</h2>
+
+        <ul>
+            <li><strong>Loox reviews</strong> installed with 76 collected and showing on your product pages</li>
+            <li><strong>Klaviyo</strong> with a genuinely smart segmentation popup, asking "chicken math / goat chaos / the whole damn farm / animals over people"</li>
+            <li><strong>30-day guarantee</strong>, secure checkout and fast shipping badges, all above the fold on PDPs</li>
+            <li><strong>"Trusted by 2,000+ homesteaders"</strong> social proof directly under the add to cart button</li>
+            <li><strong>A free shipping progress bar in the cart</strong>, with the remaining amount and copy in your own voice ("Chicken math says add another tee")</li>
+            <li><strong>A size guide</strong> linked right at the size picker</li>
+            <li><strong>A 7-question FAQ</strong> on the product page, with real answers</li>
+            <li><strong>On-PDP product recommendations</strong> ("Homesteader Favorites")</li>
+            <li><strong>A sticky announcement bar</strong> carrying the shipping offer</li>
+            <li><strong>Navigation with images</strong> and 12 identity-based collections, which is better merchandising than most stores this size</li>
+            <li><strong>Collection filtering, sorting and search</strong> all working</li>
+            <li><strong>Brand copy that actually sounds like a person.</strong> "Less than 1% ask for their money back. Please don't ruin this stat." is a better line than most brands manage anywhere on their site.</li>
+        </ul>
+
+        <p>Your publishing engine is genuinely good too. Building the habit of getting designs out consistently is the hard part, and you've built it. The recommendations above are about what goes into it, not how fast it runs.</p>
+    </div>
+</div>
+
+
+
+<!-- Priority -->
+<div class="priority">
+    <div class="container">
+        <h2>What I'd do first</h2>
+
+        <p>Ordered by how quickly you'll know it worked. The top of this list is fast to do and hard to get wrong. The further down you go, the bigger the ceiling and the longer it takes to read the result.</p>
+
+        <p>Do them one at a time. If you change five things in a week you won't know which one moved.</p>
+
+        <ol class="ranked">
+            <li><strong>Turn on a sticky add to cart on mobile.</strong> One theme setting. Your page is eleven screens tall with a single buy button at the top, so this is the clearest gap on the site.</li>
+
+            <li><strong>Run your review photos as ads.</strong> No edits, no new creative, and the asset already exists. Your bid caps protect the downside while you find out.</li>
+
+            <li><strong>Add in-cart upsells under the progress bar.</strong> You already tell people to add another tee. This just puts one in front of them.</li>
+
+            <li><strong>Cut your colours to five and reorder the swatches.</strong> Military Green, Dark Heather, Black, Heather Indigo and Navy. That's 82.3% of last year's sales, so the cut is already decided for you.</li>
+
+            <li><strong>Add anchor prices.</strong> One field per variant, bulk editable, and it makes every price on the site read as a deal instead of a number.</li>
+
+            <li><strong>Add quantity breaks.</strong> Start shallow. Measure units per order, not revenue.</li>
+
+            <li><strong>Install Microsoft Clarity.</strong> Fifteen minutes, free, and no direct lift on its own. It's here because everything below it gets easier once you can watch real sessions.</li>
+
+            <li><strong>Test the homepage hero</strong> against an offer-led variant. Run it as a variant, not a replacement.</li>
+
+            <li><strong>Add a post-purchase upsell.</strong> More setup than the rest, and pure margin once it's live.</li>
+
+            <li><strong>Point your next design run at a cultural moment</strong> with the niche and one adjacent interest stacked on it. Slowest to read, highest ceiling of anything on this page.</li>
+        </ol>
+    </div>
+</div>
+
+<div class="footer">
+    <div class="container">
+        <p><strong>Prepared by The Prompted</strong></p>
+    </div>
+</div>
+
+</body>
+</html>
